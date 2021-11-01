@@ -1,6 +1,6 @@
 #PowerShell module for VMware VMDSC Fling
 #Contributions, Improvements &/or Complete Re-writes Welcome!
-#https://github.com/PowerVMDSC/PowerVMDSC
+#https://github.com/HeathReynolds/PowerVMDSC
 
 #THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 #IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
