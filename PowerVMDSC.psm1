@@ -163,4 +163,41 @@ function Get-VMDSC {
     }
 }
 
-Export-ModuleMember -Function Get-VMDSC
+function Add-VMDSC {
+    <#
+        .SYNOPSIS
+        Adds the pending desired state config for a specific VM
+
+        .DESCRIPTION
+        The Add-VMDSC cmdlet connects to the VMDSC instance and sets a pending configuration for a specific VM.
+        An existing API token is required, please connect with Connect-VMDSC first.
+
+        .EXAMPLE
+        PS C:\> Add-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71n -cpu 2 -mem 4096
+      #>
+    param (
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
+    )
+    
+    Try {
+        $JSON = @{
+            "uuid" = "$uuid"
+            "cpu" = $cpu
+            "memsize" = $mem
+        } | ConvertTo-Json
+        $uri = "https://"+$vmdsc+":8010/config" # Set URI for executing an API call to a specific VM configuration
+        $response = Invoke-RestMethod -Uri $uri -Method Post -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
+        $response
+        }
+    Catch {
+        if($_.ErrorDetails.Message) {
+            Write-Host $_.ErrorDetails.Message
+        } else {
+            Write-Host $_
+    }
+    }
+}
+
+Export-ModuleMember -Function Add-VMDSC
