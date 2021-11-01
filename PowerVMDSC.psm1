@@ -23,8 +23,8 @@
 # importing the module
 
 #This module is tested with Powershell Core 7.0 LTS on Windows Server 2016.
-#It does not work on earlier Windows versions (Tested on 2012r2) due to weak
-#cipher suite support for TLS 1.2.
+#It does not work on earlier Windows versions (We tested on 2012r2 and it didn't work) 
+#due to weak cipher suite support for TLS 1.2.
 
 if ($PSEdition -eq 'Core') {
     $PSDefaultParameterValues.Add("Invoke-RestMethod:SkipCertificateCheck", $true)
@@ -201,3 +201,34 @@ function Add-VMDSC {
 }
 
 Export-ModuleMember -Function Add-VMDSC
+
+function Clear-VMDSC {
+    <#
+        .SYNOPSIS
+        Clears the pending desired state config for a specific VM
+
+        .DESCRIPTION
+        The Clear-VMDSC cmdlet connects to the VMDSC instance and clears the pending configuration for a specific VM.
+        An existing API token is required, please connect with Connect-VMDSC first.
+
+        .EXAMPLE
+        PS C:\> Clear-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71
+      #>
+    param (
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid
+    )
+    
+    Try {
+        $uri = "https://"+$vmdsc+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
+        $response = Invoke-RestMethod -Uri $uri -Method Delete -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1}
+        $response
+        }
+    Catch {
+        if($_.ErrorDetails.Message) {
+            Write-Host $_.ErrorDetails.Message
+        } else {
+            Write-Host $_
+    }
+    }
+}
+Export-ModuleMember -Function Clear-VMDSC
