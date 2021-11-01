@@ -26,6 +26,29 @@
 #It does not work on earlier Windows versions (Tested on 2012r2) due to weak
 #cipher suite support for TLS 1.2.
 
+if ($PSEdition -eq 'Core') {
+    $PSDefaultParameterValues.Add("Invoke-RestMethod:SkipCertificateCheck", $true)
+}
+
+if ($PSEdition -eq 'Desktop') {
+    # Enable communication with self signed certs when using Windows Powershell
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+
+    add-type @"
+    using System.Net;
+    using System.Security.Cryptography.X509Certificates;
+    public class TrustAllCertificatePolicy : ICertificatePolicy {
+        public TrustAllCertificatePolicy() {}
+        public bool CheckValidationResult(
+            ServicePoint sPoint, X509Certificate certificate,
+            WebRequest wRequest, int certificateProblem) {
+            return true;
+        }
+    }
+"@
+    [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertificatePolicy
+}
+
 function Connect-VMDSC {
     <#
         .SYNOPSIS
@@ -51,6 +74,32 @@ function Connect-VMDSC {
         $password = $creds.GetNetworkCredential().password
     }
     
+    $uri = "https://"+$vmdsc+":8010/auth/login" # Set URI for executing an API call to validate authentication
 
-
+    Try {
+        # Checking authentication with VMDSC
+        if ($PSEdition -eq 'Core') {
+            $response = Invoke-RestMethod -Method POST -Uri $uri -SslProtocol TLS12 -Authentication Basic -Credential $creds -SkipCertificateCheck # PS Core has -SkipCertificateCheck implemented
+            $Global:vmdscsessionid1 = $response.SessionID
+        }
+        else {
+            $response = Invoke-RestMethod -Method POST -Uri $uri -SslProtocol TLS12 -Authentication Basic -Credential $creds
+            $Global:vmdscsessionid1 = $response.SessionID
+        }
+        if ($response.SessionID -match "-") {
+            Write-Output "Successfully Requested New API Token From VMDSC: $vmdsc"
+        }
+        if ($response.SessionID -match "connection") {
+            Write-Output "The connection between VMDSC and vCenter timed out, please try again"
+        }
+    }
+    Catch {
+        if($_.ErrorDetails.Message) {
+            Write-Host $_.ErrorDetails.Message
+        } else {
+            Write-Host $_
+    }
 }
+}
+
+Export-ModuleMember -Function Connect-VMDSC
