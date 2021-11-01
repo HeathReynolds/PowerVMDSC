@@ -79,7 +79,7 @@ function Connect-VMDSC {
     Try {
         # Checking authentication with VMDSC
         if ($PSEdition -eq 'Core') {
-            $response = Invoke-RestMethod -Method POST -Uri $uri -SslProtocol TLS12 -Authentication Basic -Credential $creds -SkipCertificateCheck # PS Core has -SkipCertificateCheck implemented
+            $response = Invoke-RestMethod -Method POST -Uri $uri -SslProtocol TLS12 -Authentication Basic -Credential $creds
             $Global:vmdscsessionid1 = $response.SessionID
         }
         else {
@@ -103,3 +103,64 @@ function Connect-VMDSC {
 }
 
 Export-ModuleMember -Function Connect-VMDSC
+
+function Get-VMDSCAll {
+    <#
+        .SYNOPSIS
+        Reads all pending desired state configurations in the VMDSC database.
+
+        .DESCRIPTION
+        The Get-VMDSCAll cmdlet connects to the VMDSC instance and returna all configurations in the VMDSC database.
+        An existing API token is required, please connect with Connect-VMDSC first.
+
+        .EXAMPLE
+        PS C:\> Get-VMDSCAll
+      #>
+
+    Try {
+        $uri = "https://"+$vmdsc+":8010/configs" # Set URI for executing an API call to to read configs
+        $response = Invoke-RestMethod -Uri $uri -Method Get -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1}
+        $response
+        }
+    Catch {
+        if($_.ErrorDetails.Message) {
+            Write-Host $_.ErrorDetails.Message
+        } else {
+            Write-Host $_
+    }
+    }
+}
+
+Export-ModuleMember -Function Get-VMDSCAll
+
+function Get-VMDSC {
+    <#
+        .SYNOPSIS
+        Reads the pending desired state config for a specific VM
+
+        .DESCRIPTION
+        The Get-VMDSC cmdlet connects to the VMDSC instance and returns the pending configuration for a specific VM.
+        An existing API token is required, please connect with Connect-VMDSC first.
+
+        .EXAMPLE
+        PS C:\> Get-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71
+      #>
+    param (
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid
+    )
+    
+    Try {
+        $uri = "https://"+$vmdsc+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
+        $response = Invoke-RestMethod -Uri $uri -Method Get -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1}
+        $response
+        }
+    Catch {
+        if($_.ErrorDetails.Message) {
+            Write-Host $_.ErrorDetails.Message
+        } else {
+            Write-Host $_
+    }
+    }
+}
+
+Export-ModuleMember -Function Get-VMDSC
