@@ -156,8 +156,8 @@ function Get-VMDSC {
     )
     
     Try {
-        $uri = "https://"+$vmdsc+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
-        $response = Invoke-RestMethod -Uri $uri -Method Get -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1}
+        $uri = "https://"+$fqdn+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers @{'session-id' = $Global:vmdscsessionid1}
         $response
         }
     Catch {
@@ -168,6 +168,7 @@ function Get-VMDSC {
     }
     }
 }
+Export-ModuleMember -Function Get-VMDSC
 
 function Add-VMDSC {
     <#
@@ -193,8 +194,8 @@ function Add-VMDSC {
             "cpu" = $cpu
             "memsize" = $mem
         } | ConvertTo-Json
-        $uri = "https://"+$vmdsc+":8010/config" # Set URI for executing an API call to a specific VM configuration
-        $response = Invoke-RestMethod -Uri $uri -Method Post -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
+        $uri = "https://"+$fqdn+":8010/config" # Set URI for executing an API call to a specific VM configuration
+        $response = Invoke-RestMethod -Uri $uri -Method Post -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
         $response
         }
     Catch {
@@ -225,8 +226,8 @@ function Clear-VMDSC {
     )
     
     Try {
-        $uri = "https://"+$vmdsc+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
-        $response = Invoke-RestMethod -Uri $uri -Method Delete -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1}
+        $uri = "https://"+$fqdn+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
+        $response = Invoke-RestMethod -Uri $uri -Method Delete -Headers @{'session-id' = $Global:vmdscsessionid1}
         $response
         }
     Catch {
@@ -263,8 +264,8 @@ function Set-VMDSC {
             "cpu" = $cpu
             "memsize" = $mem
         } | ConvertTo-Json
-        $uri = "https://"+$vmdsc+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
-        $response = Invoke-RestMethod -Uri $uri -Method Put -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
+        $uri = "https://"+$fqdn+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
+        $response = Invoke-RestMethod -Uri $uri -Method Put -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
         $response
         }
     Catch {
