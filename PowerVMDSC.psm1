@@ -74,7 +74,12 @@ function Connect-VMDSC {
         $password = $creds.GetNetworkCredential().password
     }
     
-    $uri = "https://"+$vmdsc+":8010/auth/login" # Set URI for executing an API call to validate authentication
+    $Global:base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(("{0}:{1}" -f $username, $password))) # Create Basic Authentication Encoded Credentials
+    $Global:fqdn = $vmdsc
+
+    $headers = @{"Accept" = "application/json" }
+    $headers.Add("Authorization", "Basic $base64AuthInfo")
+    $uri = "https://"+$fqdn+":8010/auth/login" # Set URI for executing an API call to validate authentication
 
     Try {
         # Checking authentication with VMDSC
@@ -83,11 +88,11 @@ function Connect-VMDSC {
             $Global:vmdscsessionid1 = $response.SessionID
         }
         else {
-            $response = Invoke-RestMethod -Method POST -Uri $uri -SslProtocol TLS12 -Authentication Basic -Credential $creds
+            $response = Invoke-RestMethod -Method POST -Uri $uri -Headers $headers
             $Global:vmdscsessionid1 = $response.SessionID
         }
         if ($response.SessionID -match "-") {
-            Write-Output "Successfully Requested New API Token From VMDSC: $vmdsc"
+            Write-Output "Successfully Requested New API Token From VMDSC: $fqdn"
         }
         if ($response.SessionID -match "connection") {
             Write-Output "The connection between VMDSC and vCenter timed out, please try again"
@@ -117,9 +122,10 @@ function Get-VMDSCAll {
         PS C:\> Get-VMDSCAll
       #>
 
+    $uri = "https://"+$fqdn+":8010/configs" # Set URI for executing an API call to to read configs
+
     Try {
-        $uri = "https://"+$vmdsc+":8010/configs" # Set URI for executing an API call to to read configs
-        $response = Invoke-RestMethod -Uri $uri -Method Get -SslProtocol Tls12 -Headers @{'session-id' = $Global:vmdscsessionid1}
+        $response = Invoke-RestMethod -Uri $uri -Method Get -Headers @{'session-id' = $Global:vmdscsessionid1}
         $response
         }
     Catch {
