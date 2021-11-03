@@ -82,11 +82,12 @@ function Connect-VMDSC {
     $uri = "https://"+$fqdn+":8010/auth/login" # Set URI for executing an API call to validate authentication
 
     Try {
-        # Checking authentication with VMDSC
+        # Auth for Powershell Core (Store session ID as global variable)
         if ($PSEdition -eq 'Core') {
-            $response = Invoke-RestMethod -Method POST -Uri $uri -SslProtocol TLS12 -Authentication Basic -Credential $creds
+            $response = Invoke-RestMethod -Method POST -Uri $uri -Headers $headers
             $Global:vmdscsessionid1 = $response.SessionID
         }
+        # Auth for Powershell Desktop (Store session ID as global variable)
         else {
             $response = Invoke-RestMethod -Method POST -Uri $uri -Headers $headers
             $Global:vmdscsessionid1 = $response.SessionID
@@ -173,7 +174,7 @@ Export-ModuleMember -Function Get-VMDSC
 function Add-VMDSC {
     <#
         .SYNOPSIS
-        Adds the pending desired state config for a specific VM
+        Adds the pending desired state config for a specific VM 
 
         .DESCRIPTION
         The Add-VMDSC cmdlet connects to the VMDSC instance and sets a pending configuration for a specific VM.
