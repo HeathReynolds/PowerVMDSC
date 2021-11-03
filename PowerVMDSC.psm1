@@ -23,7 +23,7 @@
 # importing the module
 
 #This module is tested with Powershell Core 7.0 LTS on Windows Server 2016.
-#It does not work on earlier Windows versions (We tested on 2012r2 and it didn't work) 
+#It does not work on earlier Windows versions (We tested on 2012r2 and it didn't work)
 #due to weak cipher suite support for TLS 1.2.
 
 if ($PSEdition -eq 'Core') {
@@ -67,7 +67,7 @@ function Connect-VMDSC {
         [Parameter (Mandatory = $false)] [ValidateNotNullOrEmpty()] [String]$username,
         [Parameter (Mandatory = $false)] [ValidateNotNullOrEmpty()] [String]$password
     )
-    
+
     if ( -not $PsBoundParameters.ContainsKey("username") -or ( -not $PsBoundParameters.ContainsKey("password"))) {
         $creds = Get-Credential # Request Credentials
         $username = $creds.UserName.ToString()
@@ -101,9 +101,9 @@ function Connect-VMDSC {
     }
     Catch {
         if($_.ErrorDetails.Message) {
-            Write-Host $_.ErrorDetails.Message
+            Write-Output $_.ErrorDetails.Message
         } else {
-            Write-Host $_
+            Write-Output $_
     }
 }
 }
@@ -131,9 +131,9 @@ function Get-VMDSCAll {
         }
     Catch {
         if($_.ErrorDetails.Message) {
-            Write-Host $_.ErrorDetails.Message
+            Write-Output $_.ErrorDetails.Message
         } else {
-            Write-Host $_
+            Write-Output $_
     }
     }
 }
@@ -155,7 +155,7 @@ function Get-VMDSC {
     param (
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid
     )
-    
+
     Try {
         $uri = "https://"+$fqdn+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers @{'session-id' = $Global:vmdscsessionid1}
@@ -163,9 +163,9 @@ function Get-VMDSC {
         }
     Catch {
         if($_.ErrorDetails.Message) {
-            Write-Host $_.ErrorDetails.Message
+            Write-Output $_.ErrorDetails.Message
         } else {
-            Write-Host $_
+            Write-Output $_
     }
     }
 }
@@ -174,7 +174,7 @@ Export-ModuleMember -Function Get-VMDSC
 function Add-VMDSC {
     <#
         .SYNOPSIS
-        Adds the pending desired state config for a specific VM 
+        Adds the pending desired state config for a specific VM
 
         .DESCRIPTION
         The Add-VMDSC cmdlet connects to the VMDSC instance and sets a pending configuration for a specific VM.
@@ -188,7 +188,7 @@ function Add-VMDSC {
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
     )
-    
+
     Try {
         $JSON = @{
             "uuid" = "$uuid"
@@ -201,9 +201,9 @@ function Add-VMDSC {
         }
     Catch {
         if($_.ErrorDetails.Message) {
-            Write-Host $_.ErrorDetails.Message
+            Write-Output $_.ErrorDetails.Message
         } else {
-            Write-Host $_
+            Write-Output $_
     }
     }
 }
@@ -225,7 +225,7 @@ function Clear-VMDSC {
     param (
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid
     )
-    
+
     Try {
         $uri = "https://"+$fqdn+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Delete -Headers @{'session-id' = $Global:vmdscsessionid1}
@@ -233,9 +233,9 @@ function Clear-VMDSC {
         }
     Catch {
         if($_.ErrorDetails.Message) {
-            Write-Host $_.ErrorDetails.Message
+            Write-Output $_.ErrorDetails.Message
         } else {
-            Write-Host $_
+            Write-Output $_
     }
     }
 }
@@ -247,7 +247,7 @@ function Set-VMDSC {
         Updates the pending desired state config for a specific VM
 
         .DESCRIPTION
-        The Set-VMDSC cmdlet connects to the VMDSC instance and updates an exiting pending 
+        The Set-VMDSC cmdlet connects to the VMDSC instance and updates an exiting pending
         configuration for a specific VM.
         An existing API token is required, please connect with Connect-VMDSC first.
 
@@ -259,7 +259,7 @@ function Set-VMDSC {
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
     )
-    
+
     Try {
         $JSON = @{
             "cpu" = $cpu
@@ -271,9 +271,9 @@ function Set-VMDSC {
         }
     Catch {
         if($_.ErrorDetails.Message) {
-            Write-Host $_.ErrorDetails.Message
+            Write-Output $_.ErrorDetails.Message
         } else {
-            Write-Host $_
+            Write-Output $_
     }
     }
 }
