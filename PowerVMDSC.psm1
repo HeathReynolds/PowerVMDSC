@@ -92,11 +92,11 @@ function Connect-VMDSC {
             $response = Invoke-RestMethod -Method POST -Uri $uri -Headers $headers
             $Global:vmdscsessionid1 = $response.SessionID
         }
-        if ($response.SessionID -match "-") {
-            Write-Output "Successfully Requested New API Token From VMDSC: $fqdn"
-        }
-        if ($response.SessionID -match "connection") {
+        if ($response.SessionID -match "local/sdk") {
             Write-Output "The connection between VMDSC and vCenter timed out, please try again"
+        }
+        if ($response.SessionID -match "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}") {
+            Write-Output "Successfully Requested New API Token From VMDSC: $fqdn"
         }
     }
     Catch {
