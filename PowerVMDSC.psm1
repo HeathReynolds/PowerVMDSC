@@ -127,8 +127,13 @@ function Get-VMDSCAll {
 
     Try {
         $response = Invoke-RestMethod -Uri $uri -Method Get -Headers @{'session-id' = $Global:vmdscsessionid1}
-        $response
+        if ($response.uuid -match "[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}") {
+            $response
         }
+        else {
+            Write-Output "No pending configurations found"
+        }
+    }
     Catch {
         if($_.ErrorDetails.Message) {
             Write-Output $_.ErrorDetails.Message
