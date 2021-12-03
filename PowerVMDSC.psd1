@@ -9,10 +9,10 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = PowerVMDSC.psm1
+RootModule = 'PowerVMDSC.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1'
+ModuleVersion = '1.0'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -24,7 +24,7 @@ GUID = '2226ed83-8842-484b-99ac-d1c36aca10f7'
 Author = 'Heath Reynolds'
 
 # Description of the functionality provided by this module
-# Description = ''
+Description = 'Powershell Module for the VMDSC Fling API'
 
 # Minimum version of the PowerShell engine required by this module
 # PowerShellVersion = ''
