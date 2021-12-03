@@ -9,7 +9,7 @@
 @{
 
 # Script module or binary module file associated with this manifest.
-RootModule = PowerVMDSC.psm1
+RootModule = 'PowerVMDSC.psm1'
 
 # Version number of this module.
 ModuleVersion = '1.0'
