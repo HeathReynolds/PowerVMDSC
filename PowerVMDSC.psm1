@@ -194,6 +194,7 @@ function Add-VMDSC {
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cores
     )
 
     Try {
@@ -201,6 +202,7 @@ function Add-VMDSC {
             "uuid" = "$uuid"
             "cpu" = $cpu
             "memsize" = $mem
+            "cores_per_socket" = $cores
         } | ConvertTo-Json
         $uri = "https://"+$fqdn+":8010/config" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Post -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
@@ -265,12 +267,14 @@ function Set-VMDSC {
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cores
     )
 
     Try {
         $JSON = @{
             "cpu" = $cpu
             "memsize" = $mem
+            "cores_per_socket" = $cores
         } | ConvertTo-Json
         $uri = "https://"+$fqdn+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Put -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
