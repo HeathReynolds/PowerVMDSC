@@ -26,6 +26,8 @@
 #It does not work on earlier Windows versions (We tested on 2012r2 and it didn't work)
 #due to weak cipher suite support for TLS 1.2.
 
+#Revision - This module is updated to work with VMDSC version 1.1
+
 if ($PSEdition -eq 'Core') {
     $PSDefaultParameterValues.Add("Invoke-RestMethod:SkipCertificateCheck", $true)
 }
