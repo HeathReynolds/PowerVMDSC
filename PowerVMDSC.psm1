@@ -193,7 +193,7 @@ function Add-VMDSC {
     param (
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cores
     )
 
@@ -266,7 +266,7 @@ function Set-VMDSC {
     param (
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
+        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu,
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cores
     )
 
