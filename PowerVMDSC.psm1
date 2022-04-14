@@ -28,6 +28,9 @@
 
 #Revision - This module is updated to work with VMDSC version 1.1
 
+$PSDefaultParameterValues["Add-VMDSC:cores"]="1"
+$PSDefaultParameterValues["Set-VMDSC:cores"]="1"
+
 if ($PSEdition -eq 'Core') {
     $PSDefaultParameterValues.Add("Invoke-RestMethod:SkipCertificateCheck", $true)
 }
@@ -192,9 +195,9 @@ function Add-VMDSC {
       #>
     param (
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cores
+        [Parameter (Mandatory = $false)] [ValidateNotNullOrEmpty()] [int]$mem,
+        [Parameter (Mandatory = $false)] [ValidateNotNullOrEmpty()] [int]$cpu,
+        [Parameter (Mandatory = $false)] [ValidateNotNullOrEmpty()] [int]$cores
     )
 
     Try {
@@ -265,9 +268,9 @@ function Set-VMDSC {
       #>
     param (
         [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cores
+        [Parameter (Mandatory = $false)] [ValidateNotNullOrEmpty()] [int]$mem,
+        [Parameter (Mandatory = $false)] [ValidateNotNullOrEmpty()] [int]$cpu,
+        [Parameter (Mandatory = $false)] [ValidateNotNullOrEmpty()] [int]$cores
     )
 
     Try {
