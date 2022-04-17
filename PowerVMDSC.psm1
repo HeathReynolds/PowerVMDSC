@@ -193,23 +193,23 @@ function Add-VMDSC {
         .EXAMPLE
         PS C:\> Add-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71n -cpu 2 -mem 4096
       #>
-      [CmdletBinding(DefaultParameterSetName='prompt')]
+    [CmdletBinding(DefaultParameterSetName='prompt')]
     
-      param 
-      (
-          [Parameter(Mandatory=$true,ParameterSetName='defined')]
-          [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-          $uuid,
-          [Parameter(Mandatory=$false,ParameterSetName='defined')]
-          [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-          $mem,
-          [Parameter(Mandatory=$false,ParameterSetName='defined')]
-          [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-          $cpu,
-          [Parameter(Mandatory=$false,ParameterSetName='defined')]
-          [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-          $cores
-      )
+    param 
+    (
+        [Parameter(Mandatory=$true,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [String] $uuid,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $mem,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $cpu,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $cores
+    )
 
     Try {
         $JSON = @{
@@ -285,16 +285,16 @@ function Set-VMDSC {
     (
         [Parameter(Mandatory=$true,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        $uuid,
+        [string] $uuid,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        $mem,
+        [int] $mem,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        $cpu,
+        [int] $cpu,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        $cores
+        [int] $cores
     )
     
 
