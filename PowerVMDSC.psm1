@@ -208,7 +208,7 @@ function Add-VMDSC {
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [int] $cores,
-        [parameter( Mandatory=$false, ParameterSetName="ParameterSet3",
+        [parameter( Mandatory=$false, ParameterSetName="prompt",
                 DontShow, HelpMessage="dummy parameter")]
         [string]$AnythingFake='?'
     )
