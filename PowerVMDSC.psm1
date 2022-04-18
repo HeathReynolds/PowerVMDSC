@@ -193,7 +193,6 @@ function Add-VMDSC {
         .EXAMPLE
         PS C:\> Add-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71n -cpu 2 -mem 4096
       #>
-    [CmdletBinding(DefaultParameterSetName='prompt')]
     
     param 
     (
@@ -208,13 +207,11 @@ function Add-VMDSC {
         [int] $cpu,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        [int] $cores
+        [int] $cores,
         [parameter( Mandatory=$false, ParameterSetName="ParameterSet3",
                 DontShow, HelpMessage="dummy parameter")]
         [string]$AnythingFake='?'
     )
-
-    process {
 
         Write-Host $PsCmdlet.ParameterSetName -ForegroundColor Yellow
         # The following `switch` statement calls a different method 
@@ -225,7 +222,6 @@ function Add-VMDSC {
             "prompt" { "*/*/$AnythingFake";  break}
             Default         { throw "impossible";   break}
         }
-    }
 
     Try {
         $JSON = @{
