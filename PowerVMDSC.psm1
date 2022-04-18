@@ -209,7 +209,23 @@ function Add-VMDSC {
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [int] $cores
+        [parameter( Mandatory=$false, ParameterSetName="ParameterSet3",
+                DontShow, HelpMessage="dummy parameter")]
+        [string]$AnythingFake='?'
     )
+
+    process {
+
+        Write-Host $PsCmdlet.ParameterSetName -ForegroundColor Yellow
+        # The following `switch` statement calls a different method 
+        #       based on which parameter set the user has specified.
+        switch ($PsCmdlet.ParameterSetName) 
+        { 
+            "defined" { "$uuid/*/*";        break} 
+            "prompt" { "*/*/$AnythingFake";  break}
+            Default         { throw "impossible";   break}
+        }
+    }
 
     Try {
         $JSON = @{
