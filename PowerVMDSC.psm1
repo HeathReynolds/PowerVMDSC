@@ -199,10 +199,8 @@ function Add-VMDSC {
     param 
     (
         [Parameter(Mandatory=$true,ParameterSetName='defined')]
-        [Parameter(Mandatory=$false,ParameterSetName='prompt')]
         [String] $uuid,
-        [Parameter(Mandatory=$true,ParameterSetName='defined')]
-        [Parameter(Mandatory=$false,ParameterSetName='prompt')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [String] $promptuuid,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
@@ -212,10 +210,7 @@ function Add-VMDSC {
         [int] $cpu,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        [int] $cores,
-        [parameter( Mandatory=$false, ParameterSetName="prompt",
-                DontShow, HelpMessage="dummy parameter")]
-        [string]$AnythingFake='?'
+        [int] $cores
     )
 
     Try {
