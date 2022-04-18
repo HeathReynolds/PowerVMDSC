@@ -194,13 +194,16 @@ function Add-VMDSC {
         PS C:\> Add-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71n -cpu 2 -mem 4096
       #>
     
-    [CmdletBinding(DefaultParameterSetName="defined")]
+    [CmdletBinding(DefaultParameterSetName="prompt")]
 
     param 
     (
         [Parameter(Mandatory=$true,ParameterSetName='defined')]
-        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [Parameter(Mandatory=$false,ParameterSetName='prompt')]
         [String] $uuid,
+        [Parameter(Mandatory=$true,ParameterSetName='defined')]
+        [Parameter(Mandatory=$false,ParameterSetName='prompt')]
+        [String] $promptuuid,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [int] $mem,
@@ -217,7 +220,7 @@ function Add-VMDSC {
 
     Try {
         $JSON = @{
-            "uuid" = "$uuid"
+            "uuid" = "$uuid+$promptuuid"
             "cpu" = $cpu
             "memsize" = $mem
             "cores_per_socket" = $cores
