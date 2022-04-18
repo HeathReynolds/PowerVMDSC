@@ -194,7 +194,7 @@ function Add-VMDSC {
         PS C:\> Add-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71n -cpu 2 -mem 4096
       #>
     
-    [CmdletBinding(DefaultParameterSetName="prompt")]
+    [CmdletBinding(DefaultParameterSetName="defined")]
 
     param 
     (
@@ -214,15 +214,6 @@ function Add-VMDSC {
                 DontShow, HelpMessage="dummy parameter")]
         [string]$AnythingFake='?'
     )
-
-        Write-Host $PsCmdlet.ParameterSetName -ForegroundColor Yellow
-        # The following `switch` statement calls a different method 
-        #       based on which parameter set the user has specified.
-        switch ($PsCmdlet.ParameterSetName) 
-        { 
-            "defined" { "$uuid/*/*";        break} 
-            "prompt" { "*/*/$AnythingFake";  break}
-        }
 
     Try {
         $JSON = @{
