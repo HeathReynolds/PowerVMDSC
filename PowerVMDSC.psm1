@@ -222,7 +222,7 @@ function Add-VMDSC {
             "uuid" = "$vmuuid"
             "cpu" = $cpu
             "memsize" = $mem
-            "cores_per_socket" = $cores
+            "cores_per_socket" = $corespersocket
         } | ConvertTo-Json
         $uri = "https://"+$fqdn+":8010/config" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Post -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
@@ -299,7 +299,7 @@ function Set-VMDSC {
         [int] $cpu,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        [int] $cores
+        [int] $corespersocket
     )
   
     if ($PSBoundParameters.ContainsKey('uuid')) {
@@ -310,7 +310,7 @@ function Set-VMDSC {
         $JSON = @{
             "cpu" = $cpu
             "memsize" = $mem
-            "cores_per_socket" = $cores
+            "cores_per_socket" = $corespersocket
         } | ConvertTo-Json
         $uri = "https://"+$fqdn+":8010/config/$vmuuid" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Put -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
