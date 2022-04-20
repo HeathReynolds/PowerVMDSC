@@ -163,7 +163,7 @@ function Get-VMDSC {
         PS C:\> Get-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71
       #>
     param (
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid
+        [Parameter (Mandatory = $true,ValueFromPipeline=$true)] [ValidateNotNullOrEmpty()] [String]$uuid
     )
 
     Try {
@@ -252,7 +252,7 @@ function Clear-VMDSC {
         PS C:\> Clear-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71
       #>
     param (
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid
+        [Parameter (Mandatory = $true,ValueFromPipeline=$true)] [ValidateNotNullOrEmpty()] [String]$uuid
     )
 
     Try {
