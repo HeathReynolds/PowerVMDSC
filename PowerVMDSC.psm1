@@ -198,7 +198,7 @@ function Add-VMDSC {
 
     param 
     (
-        [Parameter(Mandatory=$true,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName='defined')]
         [String] $uuid,
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [String] $vmuuid,
@@ -287,7 +287,7 @@ function Set-VMDSC {
 
     param 
     (
-        [Parameter(Mandatory=$true,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName='defined')]
         [String] $uuid,
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [String] $vmuuid,
