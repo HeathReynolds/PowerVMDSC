@@ -28,8 +28,8 @@
 
 #Revision - This module is updated to work with VMDSC version 1.1
 
-$PSDefaultParameterValues["Add-VMDSC:cores"]="1"
-$PSDefaultParameterValues["Set-VMDSC:cores"]="1"
+$PSDefaultParameterValues["Add-VMDSC:corespersocket"]="1"
+$PSDefaultParameterValues["Set-VMDSC:corespersocket"]="1"
 
 if ($PSEdition -eq 'Core') {
     $PSDefaultParameterValues.Add("Invoke-RestMethod:SkipCertificateCheck", $true)
@@ -210,7 +210,7 @@ function Add-VMDSC {
         [int] $cpu,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        [int] $cores
+        [int] $corespersocket
     )
 
     if ($PSBoundParameters.ContainsKey('uuid')) {
