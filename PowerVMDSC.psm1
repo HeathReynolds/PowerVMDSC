@@ -214,7 +214,7 @@ function Add-VMDSC {
     )
 
     if ($PSBoundParameters.ContainsKey('uuid')) {
-        $uuid=$vmuuid
+        $vmuuid=$uuid
     }
 
     Try {
