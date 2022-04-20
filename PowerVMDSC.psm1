@@ -199,9 +199,8 @@ function Add-VMDSC {
     param 
     (
         [Parameter(Mandatory=$true,ParameterSetName='defined')]
-        [String] $uuid,
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        [String] $promptuuid,
+        [String] $uuid,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [int] $mem,
@@ -212,6 +211,10 @@ function Add-VMDSC {
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [int] $cores
     )
+
+    if ($PSBoundParameters.ContainsKey('uuid')) {
+        $PsCmdlet.ParameterSetName="defined"
+    }
 
     Try {
         $JSON = @{
