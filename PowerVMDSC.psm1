@@ -283,15 +283,14 @@ function Set-VMDSC {
         .EXAMPLE
         PS C:\> Set-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71n -cpu 2 -mem 4096
       #>
-    
+    [CmdletBinding(DefaultParameterSetName="prompt")]
 
-    [CmdletBinding(DefaultParameterSetName='prompt')]
-    
     param 
     (
         [Parameter(Mandatory=$true,ParameterSetName='defined')]
+        [String] $uuid,
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
-        [string] $uuid,
+        [String] $vmuuid,
         [Parameter(Mandatory=$false,ParameterSetName='defined')]
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [int] $mem,
@@ -302,7 +301,10 @@ function Set-VMDSC {
         [Parameter(Mandatory=$true,ParameterSetName='prompt')]
         [int] $cores
     )
-    
+  
+    if ($PSBoundParameters.ContainsKey('uuid')) {
+        $vmuuid=$uuid
+    } 
 
     Try {
         $JSON = @{
@@ -310,7 +312,7 @@ function Set-VMDSC {
             "memsize" = $mem
             "cores_per_socket" = $cores
         } | ConvertTo-Json
-        $uri = "https://"+$fqdn+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
+        $uri = "https://"+$fqdn+":8010/config/$vmuuid" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Put -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
         $response
         }
