@@ -12,7 +12,11 @@
 RootModule = 'PowerVMDSC.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0'
+ModuleVersion = '1.1.0'
+    #---
+    PrivateData = @{
+        PSData = @{
+            Prerelease = 'beta'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
