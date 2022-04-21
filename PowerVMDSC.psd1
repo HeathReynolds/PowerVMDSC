@@ -16,8 +16,10 @@ ModuleVersion = '1.1.0'
     #---
     PrivateData = @{
         PSData = @{
-            Prerelease = 'beta'
-
+            Prerelease = 'alpha'
+        }
+    }
+    
 # Supported PSEditions
 # CompatiblePSEditions = @()
 
