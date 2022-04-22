@@ -26,6 +26,11 @@
 #It does not work on earlier Windows versions (We tested on 2012r2 and it didn't work)
 #due to weak cipher suite support for TLS 1.2.
 
+#Revision - This module is updated to work with VMDSC version 1.1
+
+$PSDefaultParameterValues["Add-VMDSC:corespersocket"]="1"
+$PSDefaultParameterValues["Set-VMDSC:corespersocket"]="1"
+
 if ($PSEdition -eq 'Core') {
     $PSDefaultParameterValues.Add("Invoke-RestMethod:SkipCertificateCheck", $true)
 }
@@ -158,7 +163,7 @@ function Get-VMDSC {
         PS C:\> Get-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71
       #>
     param (
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid
+        [Parameter (Mandatory = $true,ValueFromPipeline=$true)] [ValidateNotNullOrEmpty()] [String]$uuid
     )
 
     Try {
@@ -188,17 +193,36 @@ function Add-VMDSC {
         .EXAMPLE
         PS C:\> Add-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71n -cpu 2 -mem 4096
       #>
-    param (
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
+    
+    [CmdletBinding(DefaultParameterSetName="prompt")]
+
+    param 
+    (
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName='defined')]
+        [String] $uuid,
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [String] $vmuuid,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $mem,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $cpu,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $corespersocket
     )
+
+    if ($PSBoundParameters.ContainsKey('uuid')) {
+        $vmuuid=$uuid
+    }
 
     Try {
         $JSON = @{
-            "uuid" = "$uuid"
+            "uuid" = "$vmuuid"
             "cpu" = $cpu
             "memsize" = $mem
+            "cores_per_socket" = $corespersocket
         } | ConvertTo-Json
         $uri = "https://"+$fqdn+":8010/config" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Post -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
@@ -228,7 +252,7 @@ function Clear-VMDSC {
         PS C:\> Clear-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71
       #>
     param (
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid
+        [Parameter (Mandatory = $true,ValueFromPipeline=$true)] [ValidateNotNullOrEmpty()] [String]$uuid
     )
 
     Try {
@@ -259,18 +283,36 @@ function Set-VMDSC {
         .EXAMPLE
         PS C:\> Set-vmdsc -uuid 420377f7-bceb-d929-912b-6706e5debc71n -cpu 2 -mem 4096
       #>
-    param (
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [String]$uuid,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$mem,
-        [Parameter (Mandatory = $true)] [ValidateNotNullOrEmpty()] [int]$cpu
+    [CmdletBinding(DefaultParameterSetName="prompt")]
+
+    param 
+    (
+        [Parameter(Mandatory=$true,ValueFromPipeline=$true,ParameterSetName='defined')]
+        [String] $uuid,
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [String] $vmuuid,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $mem,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $cpu,
+        [Parameter(Mandatory=$false,ParameterSetName='defined')]
+        [Parameter(Mandatory=$true,ParameterSetName='prompt')]
+        [int] $corespersocket
     )
+  
+    if ($PSBoundParameters.ContainsKey('uuid')) {
+        $vmuuid=$uuid
+    } 
 
     Try {
         $JSON = @{
             "cpu" = $cpu
             "memsize" = $mem
+            "cores_per_socket" = $corespersocket
         } | ConvertTo-Json
-        $uri = "https://"+$fqdn+":8010/config/$uuid" # Set URI for executing an API call to a specific VM configuration
+        $uri = "https://"+$fqdn+":8010/config/$vmuuid" # Set URI for executing an API call to a specific VM configuration
         $response = Invoke-RestMethod -Uri $uri -Method Put -Headers @{'session-id' = $Global:vmdscsessionid1} -Body $JSON -ContentType "application/json"
         $response
         }
