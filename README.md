@@ -20,3 +20,7 @@ Accepted TLSv1.3 256 bits TLS_AES_256_GCM_SHA384 Curve 25519 DHE 253
 Preferred TLSv1.2 128 bits ECDHE-RSA-AES128-GCM-SHA256 Curve 25519 DHE 253
 
 Accepted TLSv1.2 256 bits ECDHE-RSA-AES256-GCM-SHA384 Curve 25519 DHE 253
+
+4/21/2022 - Updated to support VMDSC version 1.1 (PowerVMDSC version 1.1.0). 
+Added support for cores per socket, pipeline uuid parameter
+Updated to support VMDSC ver 1.1 API
