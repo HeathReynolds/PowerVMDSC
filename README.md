@@ -9,6 +9,9 @@ Clear-VMDSC (Clear pending changes by UUID)
 Add-VMDSC (Add a desired state [CPU , MEM] by UUID)
 Set-VMDSC (Update and existing desired state [CPU , MEM] by UUID)
 
+The easiest way to install PowerVMDSC is from the PowerShell Gallery with the following command : 
+Install-Module -Name PowerVMDSC
+
 There are known issues with Windows 2012r2 (using either Powershell Core or Powershell Desktop). VMDSC requires TLS 1.2 or 1.3 with a secure cipher set, the cipher sets supported by the Windows 2012r2 TLS 1.2 implementation are not compatible with VMDSC. Please use a more modern windows operating system supporting the following cipher sets :
 
 Preferred TLSv1.3 128 bits TLS_AES_128_GCM_SHA256 Curve 25519 DHE 253
